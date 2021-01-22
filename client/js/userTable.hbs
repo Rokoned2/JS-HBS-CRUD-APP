@@ -1,0 +1,42 @@
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th score="col">Image</th>
+            <th score="col">Name</th>
+            <th score="col">Username</th>
+            <th score="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="users-list">
+        {{#if this}}
+        {{#each this}}
+        <tr>
+            <td>
+                <img width="90" src={{profileImagePath}}>
+            </td>
+            <td>
+                {{name}}
+            </td>
+            <td>
+                {{username}}
+            </td>
+            <td class="d-flex">
+                <button id={{id}} type="button" class="mr-2 edit-btn btn btn-primary">
+                    Edit
+                </button>
+                <button id={{id}} type="button" class="mr-2 delete-btn btn
+                                btn-danger">
+                    Delete
+                </button>
+            </td>
+        </tr>
+
+        {{/each}}
+        <!-- {user: true} -->
+        {{else}}
+        <tr>
+            <td colspan="4">No users</td>
+        </tr>
+        {{/if}}
+    </tbody>
+</table>
