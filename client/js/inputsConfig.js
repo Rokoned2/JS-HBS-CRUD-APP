@@ -4,7 +4,9 @@ const nameInput = document.getElementById("name");
 const usernameInput = document.getElementById("username");
 const deleteButton = document.querySelectorAll(".delete-btn");
 const editButton = document.querySelectorAll(".edit-btn");
-let pond = FilePond.create(document.querySelector(".filepond"));
+// let pond = FilePond.create(document.querySelector(".filepond"));
+import pond from '../fileUpload'
+
 
 addUserForm.addEventListener("submit", async (e) => {
 e.preventDefault();
@@ -16,24 +18,10 @@ e.preventDefault();
     user[key] = value;
   }
 
-  let pondImages = pond.getFiles();
+  let pondImages = pond.getFile();
 
   if (!user.name || !user.username || pondImages.length === 0) return;
-  console.log('user', user)
 
-
-  function urlencodeFormData(fd) {
-    var s = "";
-    function encode(s) {
-      return encodeURIComponent(s).replace(/%20/g, "+");
-    }
-    for (var pair of fd.entries()) {
-      if (typeof pair[1] == "string") {
-        s += (s ? "&" : "") + encode(pair[0]) + "=" + encode(pair[1]);
-      }
-    }
-    return s;
-  }
 
   pond.removeFile();
   nameInput.value = "";

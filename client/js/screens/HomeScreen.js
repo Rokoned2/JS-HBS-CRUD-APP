@@ -1,16 +1,21 @@
 import axios from 'axios';
-import { getUsers } from '../api'
+import { getUsers, deleteUser, createUser} from '../api'
 import userTable from '../userTable.hbs'
 import userForm from '../userForm.hbs'
+import FilePond from '../fileUpload'
+
 
 const HomeScreen = {
    after_render: () => {
-let pond = FilePond.create(document.querySelector(".filepond"));
-const addUserForm = document.getElementById("add-user-form");
-      addUserForm.addEventListener("submit", async (e) => {
-			e.preventDefault();
-			console.log('add user form')
+        let pond = FilePond.create(document.querySelector(".filepond"));
+        const addUserForm = document.getElementById("add-user-form");
+        const nameInput = document.getElementById("name");
+        const usernameInput = document.getElementById("username");
+        const deleteButton = document.querySelectorAll(".delete-btn");
+        const editButton = document.querySelectorAll(".edit-btn");
 
+        addUserForm.addEventListener("submit", async (e) => {
+			e.preventDefault();
 			  let user = {};
 
 			  var data = new FormData(addUserForm);
@@ -20,21 +25,25 @@ const addUserForm = document.getElementById("add-user-form");
 			  }
 
 			  let pondImages = pond.getFiles();
-			  console.log('user', user)
 
-			  if (!user.name || !user.username || pondImages.length === 0) return;
+			  if (!user.name || !user.username || !user.profileImage) return;
 			  console.log('user', user)
 
 			  pond.removeFile();
 			  nameInput.value = "";
 			  usernameInput.value = "";
-			  let response = await fetch("/", {
-			    method: "POST",
-			    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			    body: urlencodeFormData(data),
-			  });
+			  const response = await createUser(user)
+              console.log(response)
 	})
-  
+
+      for (let i = 0; i < deleteButton.length; i++) {
+          deleteButton[i].addEventListener("click", async (e) => {
+          console.log('deleteButton')
+          e.preventDefault();
+          await deleteUser(deleteButton[i].id)
+  });
+
+  }
 },
   render: async () => {
     const users = await getUsers();
@@ -45,52 +54,20 @@ const addUserForm = document.getElementById("add-user-form");
 
     return `
      <div class="row">
+    	<div class="col col-lg my-4">
+    		<div class="user-form-container">
+    			${userForm()}
+        	</div>
+        </div>
 
-	<div class="col col-lg my-4">
-		<div class="user-form-container">
-			${userForm()}
-    	</div>
+        <div class="col col-lg my-4">
+          <div class="table-container">
+    			${userTable(users.data)}
+          </div>
+        </div>
     </div>
-
-  <div class="col col-lg my-4">
-    <div class="table-container">
-			${userTable(users.data)}
-      </div>
-    </div>
-    </div>
-
-    // <ul class="products">
-    //   products
-    //     .map(
-    //       (product) => `
-    //   <li>
-    //     <div class="product">
-    //       <a href="/#/product/${product._id}">
-    //         <img src="${product.image}" alt="${product.name}" />
-    //       </a>
-    //     <div class="product-name">
-    //       <a href="/#/product/1">
-    //         ${product.name}
-    //       </a>
-    //     </div>
-    //     <div class="product-rating">
-    //       ${Rating.render({
-    //         value: product.rating,
-    //         text: `${product.numReviews} reviews`,
-    //       })}
-    //     </div>
-    //     <div class="product-brand">
-    //       ${product.brand}
-    //     </div>
-    //     <div class="product-price">
-    //       $${product.price}
-    //     </div>
-    //     </div>
-    //   </li>
-    //   `
-    //     )
-    //     .join('\n')}
-    // `;
-  },
+      `
+  }
 };
+
 export default HomeScreen;

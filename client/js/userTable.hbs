@@ -12,7 +12,7 @@
         {{#each this}}
         <tr>
             <td>
-                <img width="90" src={{profileImagePath}}>
+                <img width="90" src="http://localhost:5000{{profileImagePath}}">
             </td>
             <td>
                 {{name}}
@@ -21,11 +21,10 @@
                 {{username}}
             </td>
             <td class="d-flex">
-                <button id={{id}} type="button" class="mr-2 edit-btn btn btn-primary">
+                <button id={{_id}} type="button" class="mr-2 edit-btn btn btn-primary">
                     Edit
                 </button>
-                <button id={{id}} type="button" class="mr-2 delete-btn btn
-                                btn-danger">
+                <button id={{_id}} type="button" class="mr-2 delete-btn btn btn-danger">
                     Delete
                 </button>
             </td>

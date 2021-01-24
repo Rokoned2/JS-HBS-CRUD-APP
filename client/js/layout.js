@@ -5,14 +5,12 @@ import * as FilePond from 'filepond';
 import 'filepond/dist/filepond.min.css';
 let pond = FilePond.create(document.querySelector(".filepond"));
 
-
     const getUsers = async function() {
       let data = await fetch("http://localhost:5000/api/users")
      let response = await data.json()
 
       generateAllUsersHTML(response)
       generateUserForm()
-      console.log('se ejecuta')
     }
     getUsers()
 
